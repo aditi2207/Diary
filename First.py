@@ -14,6 +14,17 @@ flag1 = False
 flag2 = False
 
 
+def encyption(pas):
+    new_p = ""
+    for i in pas:
+        x = ord(i)
+        x += 1
+        x = chr(x)
+        new_p += x
+
+    return new_p
+
+
 def after_login(curr_id, curr_un):
     ch = input("1.Add Note   2.Delete Note   3.Update Note  4.View Notes   5.Search Note  6.Change Username/Password  "
                "7.Filter by date  8.Logout ")
@@ -95,11 +106,12 @@ def log_sign():
         pas = input("Enter Password: ")
         cur.execute('select id,PW from Users where Username="' + usnm + '";')
         pw = cur.fetchall()
+        check = encyption(pas)
         if len(pw) == 0:
             print("Incorrect Username or Password")
             log_sign()
 
-        elif pw[0][1] == pas:
+        elif pw[0][1] == check:
             curr_id = pw[0][0]
             curr_un = usnm
             flag1 = True
@@ -113,8 +125,9 @@ def log_sign():
         age = input("Age: ")
         usnm = input("Enter a username: ")
         pas = input("Enter a password: ")
+        pasw = encyption(pas)
         cur.execute("Insert into Users (Full_Name,Email,Contact,Address,Age,Username,PW) values (%s,%s,%s,%s,%s,%s,%s)",
-                    (name, email, phone, addr, age, usnm, pas))
+                    (name, email, phone, addr, age, usnm, pasw))
         flag2 = True
 
     else:
